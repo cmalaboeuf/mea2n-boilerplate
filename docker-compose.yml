@@ -1,0 +1,35 @@
+version: "2"
+volumes:
+  mongodb_data:
+  nodemodules_data:
+
+services:
+  mongodb:
+    build:
+      context: ./mongodb
+    volumes:
+      - mongodb_data:/data
+    ports:
+      - "5018:27017"
+  node:
+    extends:
+      file: docker-compose-base.yml
+      service: mean-service
+    build:
+      context: ./server
+    hostname: node
+    ports:
+      - "8888:8888"
+    volumes:
+      - "./server:/app"
+      - nodemodules_data:/app/node_modules/ #Save node_modules in a dedicated volume
+
+    links:
+     - nginx
+     - mongodb
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    volumes:
+      - "./src:/usr/share/nginx/html"

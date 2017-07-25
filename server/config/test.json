@@ -1,0 +1,4 @@
+ {
+  "database": "mongodb://localhost:5018/testDatabase",
+  "nodePort":8887
+}
